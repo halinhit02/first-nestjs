@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, ParseUUIDPipe, Post, Put, Query } from "@nestjs/common";
 import { CreateCompanyDto, UpdateCompanyDto } from "src/core/dtos/company.dto";
 import { CompanyUseCase } from "src/use-cases/company/company.use-case";
 
@@ -11,13 +11,13 @@ export class CompanyController {
         return this.companyUseCase.getAllCompanies();
     }
 
-    @Get('/search')
-    searchByName(@Query('keyword') keyword: string) {
-        return this.companyUseCase.searchCompanyByName(keyword);
+    @Get('search')
+    searchByKeyword(@Query('keyword') keyword: string) {
+        return this.companyUseCase.searchCompany(keyword);
     }
 
     @Get(':id')
-    getById(@Param('id', ParseIntPipe) id: number) {
+    getById(@Param('id', ParseUUIDPipe) id: string) {
         return this.companyUseCase.getCompanyById(id);
     }
 
@@ -26,8 +26,8 @@ export class CompanyController {
         return this.companyUseCase.createCompany(companyDto);
     }
 
-    @Put()
-    update(@Param('id', ParseIntPipe) companyId: number, @Body() updateCompanyDto: UpdateCompanyDto) {
+    @Put(':id')
+    update(@Param('id', ParseUUIDPipe) companyId: string, @Body() updateCompanyDto: UpdateCompanyDto) {
         return this.companyUseCase.updateCompany(companyId, updateCompanyDto);
     }
 }

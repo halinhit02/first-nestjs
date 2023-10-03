@@ -1,8 +1,7 @@
-import { Company } from "./company.entity";
-
 export class Product {
+    id: string;
     name: string;
-    company: Company;
+    companyId: string;
     quantity: number;
     price: number;
     year: number;

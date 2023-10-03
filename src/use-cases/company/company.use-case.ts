@@ -15,15 +15,12 @@ export class CompanyUseCase {
         return this.companies;
     }
 
-    getCompanyById(id: number): Company {
-        if (id >= this.companies.length) {
-            return new Company();
-        }
-        return this.companies[id];
+    getCompanyById(id: string): Company {
+        return this.companies.find((value, index) => value.id == id);
     }
 
-    searchCompanyByName(name: string): Company[] {
-        return this.companies.filter((value, index) => value.name.toLowerCase().includes(name.toLowerCase()));
+    searchCompany(keyword: string): Company[] {
+        return this.companies.filter((value, index) => value.name.toLowerCase().includes(keyword.toLowerCase()));
     }
 
     createCompany(createCompanyDto: CreateCompanyDto) {
@@ -32,9 +29,11 @@ export class CompanyUseCase {
         return newCompany;
     }
 
-    updateCompany(companyId: number, updateCompanyDto: UpdateCompanyDto): Company {
-        const company = this.companyFactoryService.updateCompany(updateCompanyDto);
-        this.companies[companyId] = company;
-        return company;
+    updateCompany(companyId: string, updateCompanyDto: UpdateCompanyDto): Company {
+        const updatedCompany = this.companyFactoryService.updateCompany(updateCompanyDto);
+        updatedCompany.id = companyId;
+        const companyIndex: number = this.companies.findIndex((value, index) => value.id === companyId);
+        this.companies[companyIndex] = updatedCompany;
+        return updatedCompany;
     }
 }
